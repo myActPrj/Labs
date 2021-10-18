@@ -23,8 +23,6 @@ namespace Airline_info
             if (CSV.Loadfile(@"..\..\planes(UTF8).csv", aerBorispoll) )
             {
 
-
-
             //Привітання.
             //Виберіть дію:
 
@@ -227,7 +225,11 @@ namespace Airline_info
 
         private void printColl(DateTime val, int len)
         {
-            printColl(Convert.ToString(val), len);
+            // для ф-и преобразования формата времени (использовать рускоязычный формат)
+            //ToDateTime(String, IFormatProvider)
+            var formatDT = new System.Globalization.CultureInfo("ru-RU");
+
+            printColl(Convert.ToString(val, formatDT), len);
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
@@ -406,6 +408,10 @@ namespace Airline_info
     {
         static public bool Loadfile(string fileName, Aeroport aeroport)
         {
+            // для ф-и преобразования формата времени (использовать рускоязычный формат)
+            //ToDateTime(String, IFormatProvider)
+            var formatDT = new System.Globalization.CultureInfo("ru-RU");
+
             try
             { 
                 //System.IO.StreamReader f = new System.IO.StreamReader(fileName, System.Text.Encoding.UTF8); //System.Text.Encoding.ASCII
@@ -429,11 +435,11 @@ namespace Airline_info
 
                             flight.number = Convert.ToInt32(data[0]);
 
-                            flight.departDateTime = Convert.ToDateTime(data[1]);
+                            flight.departDateTime = Convert.ToDateTime(data[1], formatDT);
                             flight.departCityPort = data[2];
                             
                             flight.destCityPort = data[3];
-                            flight.destDateTime = Convert.ToDateTime(data[4]);
+                            flight.destDateTime = Convert.ToDateTime(data[4], formatDT);
 
                             flight.price = Convert.ToInt32(data[5]);
 
