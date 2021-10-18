@@ -1,0 +1,4 @@
+﻿number;departureDateTime;departureCityPort;destinationDateTime;destinationCityPort;price;seatFree;seatTotall
+53;01.01.2022 12:00;Львів;Дніпро;01.01.2022 20:15;350;5;50
+1;01.01.2022 22:00;Ивано-Франковск;Константиновка;01.01.2022 4:16;1400;2;60
+54;22.01.2022 1:00;Киев;Львов;24.01.2022 17:00;500;0;60

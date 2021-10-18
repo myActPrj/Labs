@@ -1,0 +1,201 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+
+
+namespace Airline_info
+{
+
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8; //для корректного виведення російських літер (кодування)
+
+            Aeroport aerBorispoll = new Aeroport();
+            //aerBorispoll.flight(123, "20021-21-21", "Kiev", "20021-21-21", "Lviv", 650, 50, 0);
+            Flight fl = new Flight();
+            
+            
+            aerBorispoll.flight.Add( fl);
+
+
+
+            //Console.WriteLine(System.IO.Path.GetFullPath(@"..\..\planes1.csv"));
+
+            Aeroport aeroport = new Aeroport();
+
+            CSV.Loadfile(@"..\..\planes1.csv", aeroport);
+
+            Dictionary<string, int> dic = new Dictionary<string, int>();
+            dic.Add("name", 1);
+
+            Console.WriteLine( dic["name"] );
+
+            Console.WriteLine("\n Press Any Key");
+            Console.ReadKey();
+        }
+    }
+
+
+    struct Flight
+    {
+        public int number;                     //Номер рейсу
+
+        //departure
+        public DateTime departDateTime;     //Час і дата відправлення з нашого автовокзалу
+        public string   departCityPort;     //Початковий пункт
+
+        //arrival/destination
+        public DateTime destDateTime;   //Час прибуття в пункт призначення
+        public string   destCityPort;   //Пункт призначення
+
+        public int price;                      //Вартість квитка
+
+        public int seatTotall;                 //Кількість місць всього
+        public int seatFree;                   //Кількість вільних місць
+
+        //public Flight(int _number, DateTime _departureDateTime, string _departureCityPort, DateTime _destinationDateTime, string _destinationCityPort, int _price, int _seatTotall, int _seatFree)
+        //{
+        //    number = _number;                           //Номер рейсу
+
+        //    departureDateTime = _departureDateTime;     //Час і дата відправлення з нашого автовокзалу
+        //    departureCityPort = _departureCityPort;     //Початковий пункт
+
+        //    //arrival
+        //    destinationDateTime = _destinationDateTime; //Час прибуття в пункт призначення
+        //    destinationCityPort = _destinationCityPort; //Пункт призначення
+
+        //    price = _price;                             //Вартість квитка
+
+        //    seatTotall = _seatTotall;                   //Кількість місць всього
+        //    seatFree = _seatFree;                       //Кількість вільних місць          
+        //}
+
+    }
+
+    class Aeroport
+    {
+        public List<Flight> flight;
+
+
+        public void drawFlight()
+        {
+            int i;
+
+            Console.WriteLine("  №  |flight  |   Departure   |  Departure       | Destination   | Destination   | Seat  | seat  ");
+            Console.WriteLine("     |number  |   dateTime    |  cityPort        | dateTime      | cityPort      | free  | totall");
+
+
+            //foreach (Flight f in flight)
+            //{
+
+            //}
+        }
+        
+    }
+
+
+    class CSV
+    {
+        static public bool Loadfile(string fileName, Aeroport aeroport)
+        {
+            try
+            { 
+                //System.IO.StreamReader f = new System.IO.StreamReader(fileName, System.Text.Encoding.UTF8); //System.Text.Encoding.ASCII
+                System.IO.StreamReader f = new System.IO.StreamReader(fileName, System.Text.Encoding.ASCII); //System.Text.Encoding.ASCII
+
+                //читаэм першу стрічку файла що є шапкою/заголовоком колонок данних в файлі
+                string headerLine = f.ReadLine();
+                //string headerLine = "number;departureDateTime;departureCityPort;destinationDateTime;destinationCityPort;price;seatTotall;seatFree;;;";
+                string[] header = headerLine.Split(';');
+                //foreach (var item in header)
+                //{
+                //    if (item != "")
+                //        Console.WriteLine(item + ";");
+                //}
+
+
+                Flight flight = new Flight();
+                flight.number = 45;
+
+                string dataLine;
+
+                while ( (dataLine = f.ReadLine()) != null )
+                {
+                    Console.WriteLine(dataLine);
+                    
+                    string[] data = dataLine.Split(';');
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        // відкидуєм колоночку c пустим заголовком
+                        if (header[i] != "")
+                        {
+                            Console.Write($"{header[i]}: ");
+                            Console.Write($"{data[i]} ");
+                            Console.WriteLine();
+
+                            flight.number = Convert.ToInt32(data[0]);
+
+                            flight.departDateTime = Convert.ToDateTime(data[1]);
+                            flight.departCityPort = data[2];
+
+                            
+                            flight.destCityPort = data[3];
+                            flight.destDateTime = Convert.ToDateTime(data[4]);
+
+                            flight.price = Convert.ToInt32(data[5]);
+
+                            flight.seatFree = Convert.ToInt32(data[6]);
+                            flight.seatTotall = Convert.ToInt32(data[7]);
+
+
+                            Aeroport a = new Aeroport();
+
+                            //aeroport.flight.Add(flight);
+                            a.flight.Add(flight);
+
+                        }
+
+                        aeroport.drawFlight();
+                    }
+
+
+                }
+
+
+
+                f.Close();
+                return true;
+            }
+            catch (System.IO.FileNotFoundException e)
+            {
+                Console.WriteLine( e.Message );
+                //Console.WriteLine($"Please use correct fileName puth CSV-file");
+                return false;
+            }
+
+            //інші помилки при читанні файла
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.Message);
+                return false;
+            }
+
+
+
+
+        }
+        
+    }
+
+
+
+
+}
